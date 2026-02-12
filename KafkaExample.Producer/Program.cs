@@ -11,11 +11,14 @@ using var producer = new ProducerBuilder<Null, string>(config).Build();
 
 try
 {
-    var result = await producer.ProduceAsync(
-        "test-topic",
-        new Message<Null, string> { Value = "Message from producer" });
+    for (int i = 0; i < 3; i++)
+    {
+        var result = await producer.ProduceAsync(
+            "test-topic",
+            new Message<Null, string> { Value = $"Message from producer {i}" });
 
-    Console.WriteLine($"Delivered to: {result.TopicPartitionOffset}");
+        Console.WriteLine($"Delivered to: {result.TopicPartitionOffset}");
+    }
 }
 catch (ProduceException<Null, string> e)
 {
