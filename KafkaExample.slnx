@@ -2,6 +2,7 @@
   <Project Path="docker-compose.dcproj">
     <Build />
   </Project>
+  <Project Path="KafkaExample.Common/KafkaExample.Common.csproj" />
   <Project Path="KafkaExample.Consumer/KafkaExample.Consumer.csproj" />
   <Project Path="KafkaExample.Producer/KafkaExample.Producer.csproj" />
 </Solution>

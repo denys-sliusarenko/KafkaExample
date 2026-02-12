@@ -1,12 +1,13 @@
-﻿using System;
-using Confluent.Kafka;
+﻿using Confluent.Kafka;
+using KafkaExample.Common;
+using System.Text.Json;
 
 
 var config = new ConsumerConfig
 {
     BootstrapServers = "localhost:9092",
     GroupId = "test-group",
-    AutoOffsetReset = AutoOffsetReset.Earliest
+    AutoOffsetReset = AutoOffsetReset.Earliest,
 };
 
 using var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
@@ -19,7 +20,10 @@ try
     while (true)
     {
         var cr = consumer.Consume();
-        Console.WriteLine($"Received: {cr.Message.Value}");
+
+        var message = JsonSerializer.Deserialize<MyKafkaMessage>(cr.Message.Value);
+
+        Console.WriteLine($"Received: {message.Id} : {message.MessageValue}");
     }
 }
 catch (OperationCanceledException)

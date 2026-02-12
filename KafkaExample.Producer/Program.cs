@@ -1,6 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using Confluent.Kafka;
+﻿using Confluent.Kafka;
+using KafkaExample.Common;
+using System.Text.Json;
 
 var config = new ProducerConfig
 {
@@ -15,7 +15,14 @@ try
     {
         var result = await producer.ProduceAsync(
             "test-topic",
-            new Message<Null, string> { Value = $"Message from producer {i}" });
+            new Message<Null, string> { 
+                Value = JsonSerializer.Serialize(
+                    new MyKafkaMessage 
+                    { 
+                        MessageValue = $"Message from producer {i}", 
+                        Id = Guid.NewGuid() 
+                    })
+            });
 
         Console.WriteLine($"Delivered to: {result.TopicPartitionOffset}");
     }
